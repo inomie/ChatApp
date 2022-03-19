@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Chatapp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/button</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/button</item>
+    </style>
+</resources>
