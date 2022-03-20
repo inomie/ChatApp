@@ -1,5 +1,6 @@
 package com.example.chatapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,6 +12,16 @@ import android.widget.Toast;
 import com.example.chatapp.databinding.ActivitySignUpBinding;
 import com.example.chatapp.utilites.Constants;
 import com.example.chatapp.utilites.PreferenceManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -19,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
     private PreferenceManager preferenceManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +51,8 @@ public class SignUpActivity extends AppCompatActivity {
         binding.buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidDetails()) {
-                    signUp();
-                }
+                isValidDetails();
+
             }
         });
     }
@@ -61,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
                     preferenceManager.putString(Constants.KEY_NAME,
                             binding.inputName.getText().toString());
-                    Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 })
@@ -75,32 +86,48 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private Boolean isValidDetails() {
+    private void isValidDetails() {
 
         if(binding.inputName.getText().toString().trim().isEmpty()) {
             showToast("Enter Name");
-            return false;
+            return;
         } else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
             showToast("Enter Email");
-            return false;
+            return;
         } else if(!Patterns.EMAIL_ADDRESS.matcher(
                 binding.inputEmail.getText().toString()).matches()) {
             showToast("Enter Valid Email");
-            return false;
+            return;
         } else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
             showToast("Enter Password");
-            return false;
+            return;
         } else if (binding.inputConfirmPassword.getText().toString().trim().isEmpty()) {
             showToast("Confirm Password");
-            return false;
+            return;
         } else if (!binding.inputPassword.getText().toString().equals
                 (binding.inputConfirmPassword.getText().toString())) {
             showToast("Passwords are not equal");
-            return false;
+            return;
         }
 
-        return true;
+        checkEmail();
 
+    }
+
+    private void checkEmail() {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .whereEqualTo(Constants.KEY_EMAIL, binding.inputEmail.getText().toString())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isComplete() && task.getResult() != null
+                            && task.getResult().getDocuments().size() > 0) {
+                        loading(false);
+                        showToast("Email already exist");
+                    } else {
+                        signUp();
+                    }
+                });
     }
 
     private void loading(Boolean isLoading) {

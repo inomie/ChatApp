@@ -82,7 +82,7 @@
             android:background="@drawable/input_field"
             android:hint="@string/confirm_password"
             android:textColorHint="@color/hint"
-            android:imeOptions="actionGo"
+            android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textPassword"
             android:paddingStart="@dimen/_20sdp"
