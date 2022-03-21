@@ -10,4 +10,6 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
 </resources>

@@ -1,13 +1,16 @@
 package com.example.chatapp.activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.chatapp.R;
 import com.example.chatapp.databinding.ActivityMainBinding;
 import com.example.chatapp.utilites.Constants;
 import com.example.chatapp.utilites.PreferenceManager;
@@ -16,6 +19,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import android.util.Base64;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,8 +48,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void loadUserDetails() {
         binding.textName.setText(preferenceManager.getString(Constants.KEY_NAME));
+        if (preferenceManager.getString(Constants.KEY_IMAGE) != null) {
+            byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            binding.profileImage.setImageBitmap(bitmap);
+        }
+
     }
 
     private void showToast(String message) {
