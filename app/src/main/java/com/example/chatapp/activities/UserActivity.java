@@ -2,11 +2,13 @@ package com.example.chatapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.example.chatapp.adapters.UserAdapters;
 import com.example.chatapp.databinding.ActivityUserBinding;
+import com.example.chatapp.listeners.UserListeners;
 import com.example.chatapp.models.User;
 import com.example.chatapp.utilites.Constants;
 import com.example.chatapp.utilites.PreferenceManager;
@@ -16,7 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity implements UserListeners {
 
     private ActivityUserBinding binding;
     private PreferenceManager preferenceManager;
@@ -77,7 +79,7 @@ public class UserActivity extends AppCompatActivity {
                             users.add(user);
                         }
                         if (users.size() > 0) {
-                            UserAdapters userAdapters = new UserAdapters(users);
+                            UserAdapters userAdapters = new UserAdapters(users, this);
                             binding.usersRecyclerView.setAdapter(userAdapters);
                             binding.errorText.setVisibility(View.INVISIBLE);
                             binding.usersRecyclerView.setVisibility(View.VISIBLE);
@@ -105,16 +107,16 @@ public class UserActivity extends AppCompatActivity {
                             if (currentUserId.equals(queryDocumentSnapshot.getId())) {
                                 continue;
                             }
-
                             User user = new User();
                             user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                             user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
                             user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
                             user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                            user.id = queryDocumentSnapshot.getId();
                             users.add(user);
                         }
                         if (users.size() > 0) {
-                            UserAdapters userAdapters = new UserAdapters(users);
+                            UserAdapters userAdapters = new UserAdapters(users, this);
                             binding.usersRecyclerView.setAdapter(userAdapters);
                             binding.usersRecyclerView.setVisibility(View.VISIBLE);
                         } else {
@@ -137,5 +139,13 @@ public class UserActivity extends AppCompatActivity {
         } else {
             binding.progressbar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onUserClicked(User user) {
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra(Constants.KEY_USER, user);
+        startActivity(intent);
+        finish();
     }
 }
