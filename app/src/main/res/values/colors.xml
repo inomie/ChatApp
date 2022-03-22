@@ -6,5 +6,6 @@
     <color name="button">#373737</color>
     <color name="button_border">#3B3B3B</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="hint">#B3FFFFFF</color>
 </resources>

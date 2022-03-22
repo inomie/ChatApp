@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chatapp">
         <activity
+            android:name=".activities.UserActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ProfilePictureActivity"
             android:exported="false" />
         <activity

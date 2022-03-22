@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
             }
         });
+        binding.addUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),UserActivity.class));
+            }
+        });
 
     }
 
@@ -70,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                         preferenceManager.getString(Constants.KEY_USER_ID)
                 );
         documentReference.update(Constants.KEY_FCM_TOKEN, token)
-                .addOnSuccessListener(unused -> showToast("Token updated successfully"))
                 .addOnFailureListener(e -> showToast("Unable to update token"));
     }
 

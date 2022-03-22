@@ -53,6 +53,14 @@ public class SigninActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.inputPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidDetails()) {
+                    signIn();
+                }
+            }
+        });
     }
 
     private void signIn() {

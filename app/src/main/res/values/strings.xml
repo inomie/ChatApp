@@ -12,4 +12,8 @@
     <string name="sign_in">Sign In</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+    <string name="add_user">add_user</string>
+    <string name="search_for_user">Search for user</string>
+    <string name="user">user</string>
+    <string name="user_name">user name</string>
 </resources>
