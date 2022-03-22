@@ -16,4 +16,5 @@
     <string name="search_for_user">Search for user</string>
     <string name="user">user</string>
     <string name="user_name">user name</string>
+    <string name="message">Message</string>
 </resources>

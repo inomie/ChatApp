@@ -2,11 +2,9 @@ package com.example.chatapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.chatapp.R;
 import com.example.chatapp.adapters.UserAdapters;
 import com.example.chatapp.databinding.ActivityUserBinding;
 import com.example.chatapp.models.User;
@@ -35,33 +33,22 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        binding.imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
+        binding.imageBack.setOnClickListener(v -> onBackPressed());
+        binding.imageSearch.setOnClickListener(v -> {
+            if (clicked == 0) {
+                binding.headerTitle.setVisibility(View.INVISIBLE);
+                binding.SearchBar.setVisibility(View.VISIBLE);
+                clicked++;
+            } else {
+                binding.headerTitle.setVisibility(View.VISIBLE);
+                binding.SearchBar.setVisibility(View.INVISIBLE);
+                clicked = 0;
             }
-        });
-        binding.imageSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (clicked == 0) {
-                    binding.headerTitle.setVisibility(View.INVISIBLE);
-                    binding.SearchBar.setVisibility(View.VISIBLE);
-                    clicked++;
-                } else {
-                    binding.headerTitle.setVisibility(View.VISIBLE);
-                    binding.SearchBar.setVisibility(View.INVISIBLE);
-                    clicked = 0;
-                }
 
-            }
         });
-        binding.SearchBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!binding.SearchBar.getText().toString().isEmpty()) {
-                    getUsersOnSearch();
-                }
+        binding.SearchBar.setOnClickListener(v -> {
+            if (!binding.SearchBar.getText().toString().isEmpty()) {
+                getUsersOnSearch();
             }
         });
     }
