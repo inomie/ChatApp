@@ -8,4 +8,5 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="hint">#B3FFFFFF</color>
+    <color name="chat_background">#1C2E46</color>
 </resources>
