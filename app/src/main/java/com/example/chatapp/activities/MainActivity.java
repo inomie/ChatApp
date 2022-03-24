@@ -1,19 +1,18 @@
 package com.example.chatapp.activities;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.chatapp.adapters.RecentConversionsAdapter;
 import com.example.chatapp.databinding.ActivityMainBinding;
+import com.example.chatapp.listeners.ConversionListener;
 import com.example.chatapp.models.ChatMessage;
+import com.example.chatapp.models.User;
 import com.example.chatapp.utilites.Constants;
 import com.example.chatapp.utilites.PreferenceManager;
 import com.google.firebase.firestore.DocumentChange;
@@ -31,7 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements ConversionListener {
 
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         conversations = new ArrayList<>();
-        conversionsAdapter = new RecentConversionsAdapter(conversations);
+        conversionsAdapter = new RecentConversionsAdapter(conversations, this);
         binding.conversionsRecyclerView.setAdapter(conversionsAdapter);
         database = FirebaseFirestore.getInstance();
     }
@@ -196,4 +195,10 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> showToast("Failed to sign out"));
     }
 
+    @Override
+    public void onConversionClicked(User user) {
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra(Constants.KEY_USER, user);
+        startActivity(intent);
+    }
 }

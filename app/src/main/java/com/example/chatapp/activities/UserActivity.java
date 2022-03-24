@@ -1,6 +1,5 @@
 package com.example.chatapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +17,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserActivity extends AppCompatActivity implements UserListeners {
+public class UserActivity extends BaseActivity implements UserListeners {
 
     private ActivityUserBinding binding;
     private PreferenceManager preferenceManager;
