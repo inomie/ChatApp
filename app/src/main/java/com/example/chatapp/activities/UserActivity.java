@@ -1,9 +1,10 @@
 package com.example.chatapp.activities;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chatapp.adapters.UserAdapters;
 import com.example.chatapp.databinding.ActivityUserBinding;
@@ -11,17 +12,19 @@ import com.example.chatapp.listeners.UserListeners;
 import com.example.chatapp.models.User;
 import com.example.chatapp.utilites.Constants;
 import com.example.chatapp.utilites.PreferenceManager;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserActivity extends BaseActivity implements UserListeners {
+public class UserActivity extends AppCompatActivity implements UserListeners {
 
     private ActivityUserBinding binding;
     private PreferenceManager preferenceManager;
     private int clicked = 0;
+    private Boolean stillInApp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,9 @@ public class UserActivity extends BaseActivity implements UserListeners {
                             user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
                             user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
                             user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                            user.id = queryDocumentSnapshot.getId();
                             users.add(user);
+                            break;
                         }
                         if (users.size() > 0) {
                             UserAdapters userAdapters = new UserAdapters(users, this);
@@ -144,7 +149,34 @@ public class UserActivity extends BaseActivity implements UserListeners {
     public void onUserClicked(User user) {
         Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
         intent.putExtra(Constants.KEY_USER, user);
+        //stillInApp = true;
         startActivity(intent);
         finish();
     }
+/*
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!stillInApp) {
+            DocumentReference documentReference;
+            PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+            FirebaseFirestore database = FirebaseFirestore.getInstance();
+            documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID));
+            documentReference.update(Constants.KEY_AVAILABLE, 0);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DocumentReference documentReference;
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID));
+        documentReference.update(Constants.KEY_AVAILABLE, 1);
+        stillInApp = false;
+    }*/
 }

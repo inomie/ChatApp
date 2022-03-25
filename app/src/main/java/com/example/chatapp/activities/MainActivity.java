@@ -1,6 +1,5 @@
 package com.example.chatapp.activities;
 
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,18 +24,21 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import android.util.Base64;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements ConversionListener {
+public class MainActivity extends AppCompatActivity implements ConversionListener {
 
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
     private List<ChatMessage> conversations;
     private RecentConversionsAdapter conversionsAdapter;
     private FirebaseFirestore database;
+    private Boolean stillInApp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +64,14 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         binding.imageSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stillInApp = false;
                 signOut();
             }
         });
         binding.addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stillInApp = true;
                 startActivity(new Intent(getApplicationContext(),UserActivity.class));
             }
         });
@@ -164,6 +168,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     };
 
     private void updateToken(String token) {
+        preferenceManager.putString(Constants.KEY_FCM_TOKEN, token);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =
                 database.collection(Constants.KEY_COLLECTION_USERS).document(
@@ -199,6 +204,34 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     public void onConversionClicked(User user) {
         Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
         intent.putExtra(Constants.KEY_USER, user);
+        stillInApp = true;
         startActivity(intent);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!stillInApp) {
+            DocumentReference documentReference;
+            PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+            FirebaseFirestore database = FirebaseFirestore.getInstance();
+            documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID));
+            documentReference.update(Constants.KEY_AVAILABLE, 0);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DocumentReference documentReference;
+        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID));
+        documentReference.update(Constants.KEY_AVAILABLE, 1);
+        stillInApp = false;
     }
 }

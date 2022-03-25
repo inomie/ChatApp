@@ -70,7 +70,10 @@ public class RecentConversionsAdapter extends
     }
 
     private Bitmap getConversionImage(String encodedImage) {
-        byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        if(encodedImage != null) {
+            byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        return null;
     }
 }
