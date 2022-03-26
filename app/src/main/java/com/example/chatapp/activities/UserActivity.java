@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserActivity extends AppCompatActivity implements UserListeners {
 
@@ -111,13 +112,16 @@ public class UserActivity extends AppCompatActivity implements UserListeners {
                             if (currentUserId.equals(queryDocumentSnapshot.getId())) {
                                 continue;
                             }
-                            User user = new User();
-                            user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
-                            user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
-                            user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
-                            user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
-                            user.id = queryDocumentSnapshot.getId();
-                            users.add(user);
+                            if(Objects.equals(queryDocumentSnapshot.getString(Constants.KEY_EMAIL),
+                                    "robsod94@gmail.com")) {
+                                User user = new User();
+                                user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
+                                user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
+                                user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
+                                user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                                user.id = queryDocumentSnapshot.getId();
+                                users.add(user);
+                            }
                         }
                         if (users.size() > 0) {
                             UserAdapters userAdapters = new UserAdapters(users, this);
