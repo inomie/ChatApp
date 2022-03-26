@@ -1,6 +1,6 @@
 # Chat application
 ## Description
-A small project where I made a chat application to practice my skills in Java for applications.
+A small project where I made a chat application to practicing my skills in Java for applications.
 
 The application is done in android studio with Java.
 
@@ -31,10 +31,10 @@ Some extra functions.
 
 - When the user are in a chat it can see if the other person is online or not.
 - When the user tabs out or close the application it will save down that the user is not logged in anymore in the database.
-- When opening up the application again will automatic log the user back in.
+- When opening up the application again, will automatic log the user back in.
 - If the user have tabbed down the user will receive notifications if any one text them.
 
-If you want to true to login and not make a new account you can use:
+If you want to try to login and not make a new account you can use:
 Email: test@gmail.com
 Password: test
 
