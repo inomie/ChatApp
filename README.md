@@ -34,6 +34,10 @@ Some extra functions.
 - When opening up the application again will automatic log the user back in.
 - If the user have tabbed down the user will receive notifications if any one text them.
 
+If you want to true to login and not make a new account you can use:
+Email: test@gmail.com
+Password: test
+
 ## Improvements
 Some improvements that I will implement in the future.
 
