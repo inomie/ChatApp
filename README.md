@@ -11,6 +11,7 @@ To install the application I have uploaded an APK for you to download to your ph
 Remember that the application is only for android.
 
 ## Demonstration
+![vlc-record-2022-03-26-13h23m35s-2022-03-26 13-12-48 mkv- (online-video-cutter com)](https://user-images.githubusercontent.com/78423305/160239845-7882b33a-0f57-4032-b85e-c306e11c2bd8.gif)
 
 ## Usage
 When you have installed the application on your phone (android) you can then sign up.
@@ -31,6 +32,7 @@ Some extra functions.
 - When the user are in a chat it can see if the other person is online or not.
 - When the user tabs out or close the application it will save down that the user is not logged in anymore in the database.
 - When opening up the application again will automatic log the user back in.
+- If the user have tabbed down the user will receive notifications if any one text them.
 
 ## Improvements
 Some improvements that I will implement in the future.
