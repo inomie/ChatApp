@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements ConversionListene
                 );
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
+        updates.put(Constants.KEY_AVAILABLE, 0);
         documentReference.update(updates)
                 .addOnSuccessListener(unused -> {
                     preferenceManager.clear();
